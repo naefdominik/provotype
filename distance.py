@@ -17,9 +17,18 @@ def runExample():
         print("Sensor initialization unsuccessful. Exiting...", file=sys.stderr)
         sys.exit(1)
  
-    myVL53L5CX.set_resolution(8*8) # enable all 64 pads
+    myVL53L5CX.set_resolution(4*4) # was set to 8*8
     image_resolution = myVL53L5CX.get_resolution()  # Query sensor for current resolution - either 4x4 or 8x8
     image_width = int(sqrt(image_resolution)) # Calculate printing width
+
+    # Using 4x4, min frequency is 1Hz and max is 60Hz
+    # Using 8x8, min frequency is 1Hz and max is 15Hz
+    if myVL53L5CX.set_ranging_frequency_hz(60) == False:
+        print("Failed to set ranging frequency", file=sys.stderr)
+        sys.exit(1)
+    else:
+        frequency = myVL53L5CX.get_ranging_frequency_hz()
+        print("Current ranging frequency is: ", frequency, "Hz")
 
     myVL53L5CX.start_ranging()
  
