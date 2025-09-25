@@ -17,7 +17,7 @@ def runExample():
         print("Sensor initialization unsuccessful. Exiting...", file=sys.stderr)
         sys.exit(1)
  
-    myVL53L5CX.set_resolution(4*4) # enable all 64 pads
+    myVL53L5CX.set_resolution(8*8) # enable all 64 pads
     image_resolution = myVL53L5CX.get_resolution()  # Query sensor for current resolution - either 4x4 or 8x8
     image_width = int(sqrt(image_resolution)) # Calculate printing width
 
