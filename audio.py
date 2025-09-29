@@ -21,20 +21,6 @@ intro_phrases = [
     "This is really important, so I will explain it step by step."
 ]
 
-distance_phrases = [
-    "The distance I measured is {dist} millimeters.",
-    "Right now, the object is {dist} millimeters away.",
-    "What I see is {dist} millimeters, and I am telling you.",
-    "I just checked and it is exactly {dist} millimeters."
-]
-
-conversion_phrases = [
-    "That equals about {cm:.0f} centimeters, which is like a ruler and a half.",
-    "In meters, that would be around {m:.2f}. Yes, meters.",
-    "If you like numbers, that is {cm:.0f} centimeters, or {m:.2f} meters.",
-    "For comparison, {cm:.0f} centimeters is like the length of your arm."
-]
-
 meaning_phrases_close = [
     "Oh no! That is super close. Please stop immediately.",
     "That is dangerously near. You should really be careful now.",
@@ -72,8 +58,6 @@ def narration_for_distance(dist):
 
     narration = " ".join([
         random.choice(intro_phrases),
-        random.choice(distance_phrases).format(dist=dist),
-        random.choice(conversion_phrases).format(cm=cm, m=m),
         meaning,
         random.choice(repeat_phrases).format(meaning=meaning)
     ])
