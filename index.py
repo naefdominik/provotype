@@ -163,7 +163,12 @@ def setup_display():
     pygame.init()
     screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)  # Fullscreen
     pygame.display.set_caption("Distance Display")
-    font = pygame.font.SysFont("Arial", 200)  # Large text
+
+    # Scale font size based on screen height
+    screen_rect = screen.get_rect()
+    font_size = int(screen_rect.height * 0.15)
+    font = pygame.font.SysFont("Arial", font_size)
+
     return screen, font
 
 def update_display(screen, font, distance_value):
