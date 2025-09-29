@@ -26,8 +26,7 @@ def setup_sensor():
         print("Sensor initialization unsuccessful. Exiting...", file=sys.stderr)
         sys.exit(1)
 
-    # myVL53L5CX.set_resolution(8 * 8)
-    myVL53L5CX.set_resolution(4 * 4)
+    myVL53L5CX.set_resolution(8 * 8)
     myVL53L5CX.start_ranging()
 
     return myVL53L5CX
