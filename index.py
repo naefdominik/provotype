@@ -7,6 +7,7 @@ import sounddevice as sd
 import pyttsx3
 import random
 import threading
+import pygame
 
 
 # ============================================================================
@@ -156,12 +157,36 @@ def trigger_voice_feedback(distance_value):
 
 
 # ============================================================================
+# VISUAL FEEDBACK SETUP
+# ============================================================================
+def setup_display():
+    pygame.init()
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)  # Fullscreen
+    pygame.display.set_caption("Distance Display")
+    font = pygame.font.SysFont("Arial", 200)  # Large text
+    return screen, font
+
+def update_display(screen, font, distance_value):
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
+            pygame.quit()
+            sys.exit()
+
+    screen.fill((0, 0, 0))  # Black background
+    text_surface = font.render(f"{distance_value} mm", True, (255, 255, 255))  # White text
+    rect = text_surface.get_rect(center=screen.get_rect().center)
+    screen.blit(text_surface, rect)
+    pygame.display.flip()
+
+
+# ============================================================================
 # MAIN LOOP
 # ============================================================================
 def run_integrated_system():
     # Initialize all systems
     sensor = setup_sensor()
     audio_stream = setup_audio()
+    screen, font = setup_display()
 
     image_resolution = sensor.get_resolution()
     image_width = int(sqrt(image_resolution))
@@ -169,6 +194,7 @@ def run_integrated_system():
     print("\n=== Integrated Distance Feedback System ===")
     print("Audio feedback: Continuous tone (50-100 Hz)")
     print("Voice feedback: Periodic narration every 3 seconds")
+    print("Visual feedback: Fullscreen display of distance (ESC to quit)")
     print("Press Ctrl+C to exit\n")
 
     try:
@@ -186,6 +212,9 @@ def run_integrated_system():
                 # Trigger voice feedback (periodic)
                 trigger_voice_feedback(distance_value)
 
+                # Update fullscreen display
+                update_display(screen, font, distance_value)
+
                 # Print to console
                 print(f"Distance: {distance_value} mm → Audio: {current_freq:.1f} Hz")
 
@@ -195,6 +224,7 @@ def run_integrated_system():
         print("\n\nShutting down...")
         audio_stream.stop()
         audio_stream.close()
+        pygame.quit()
         print("System stopped.")
 
 
