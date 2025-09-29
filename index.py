@@ -106,9 +106,6 @@ repeat_phrases = [
 
 
 def narration_for_distance(dist):
-    cm = dist / 10
-    m = dist / 1000
-
     if dist < 500:
         meaning = random.choice(meaning_phrases_close)
     elif dist < 1200:
@@ -129,7 +126,7 @@ def narration_for_distance(dist):
 voice_lock = threading.Lock()
 voice_active = False
 last_voice_time = 0
-VOICE_INTERVAL = 3.0  # Speak every 3 seconds
+VOICE_INTERVAL = 1.0  # Speak every 3 seconds
 
 
 def voice_feedback_thread(distance_value):
