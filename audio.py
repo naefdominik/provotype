@@ -5,7 +5,7 @@ import pyttsx3
 # Initialize the TTS engine
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
-engine.setProperty("volume", 1.0)
+engine.setProperty("volume", 0.1)
 # engine.setProperty('voice', engine.getProperty('voices')[1].id)
 
 def say(text):
