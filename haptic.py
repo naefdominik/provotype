@@ -28,11 +28,11 @@ def loop():
     while True:
         distance_value = distances[i % len(distances)]
 
-        # Map distance → frequency, capped at 150 Hz
-        freq = 50 + (150 - 50) * (1 - min(distance_value, 2000) / 2000)
-        # Range is now 50 Hz (far) → 150 Hz (close)
+        # Map distance → frequency, capped at 100 Hz
+        freq = 50 + (100 - 50) * (1 - min(distance_value, 2000) / 2000)
+        # Range is now 50 Hz (far) → 100 Hz (close)
 
-        current_freq = min(freq, 150)  # safety cap
+        current_freq = min(freq, 100)  # safety cap
 
         print(f"Distance: {distance_value} mm → {current_freq:.1f} Hz")
         i += 1
