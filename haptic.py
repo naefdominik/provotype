@@ -16,7 +16,7 @@ audio_callback.frame = 0
 
 # --- Start audio stream ---
 print(sd.query_devices())
-device_id = 4
+device_id = 0  # Headphone jack on Raspberry Pi
 
 stream = sd.OutputStream(callback=audio_callback, samplerate=samplerate, channels=1, device=device_id)
 stream.start()
