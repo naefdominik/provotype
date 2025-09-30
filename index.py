@@ -188,7 +188,7 @@ def run_integrated_system():
     # Initialize all systems
     sensor = setup_sensor()
     audio_stream = setup_audio()
-    # screen, font = setup_display()
+    screen, font = setup_display()
 
     image_resolution = sensor.get_resolution()
     image_width = int(sqrt(image_resolution))
@@ -206,7 +206,7 @@ def run_integrated_system():
 
                 # Get center pixel distance
                 center_index = (image_width // 2) * image_width + (image_width // 2)
-                distance_value = measurement_data.distance_mm[center_index]
+                distance_value = measurement_data.distance_mm[center_index] / 4
 
                 # Update audio feedback (continuous)
                 update_audio_frequency(distance_value)
@@ -215,7 +215,7 @@ def run_integrated_system():
                 trigger_voice_feedback(distance_value)
 
                 # Update fullscreen display
-                # update_display(screen, font, distance_value)
+                update_display(screen, font, distance_value)
 
                 # Print to console
                 print(f"Distance: {distance_value} mm → Audio: {current_freq:.1f} Hz")
