@@ -194,7 +194,8 @@ def update_display(screen, font_large, font_small, distance_value):
     screen.fill((0, 0, 0))  # Black background
 
     # Distance text (large)
-    text_surface = font_large.render(f"{distance_value:.0f} mm", True, (255, 255, 255))
+    distance_m = distance_value / 1000.0
+    text_surface = font_large.render(f"{distance_m:.2f} m", True, (255, 255, 255))
     rect = text_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 80))
     screen.blit(text_surface, rect)
 
