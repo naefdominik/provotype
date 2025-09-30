@@ -153,6 +153,7 @@ def voice_feedback_thread(distance_value):
     global voice_active
     try:
         narration = narration_for_distance(distance_value)
+        engine.stop()  # kill any running narration immediately
         engine.say(narration)
         engine.runAndWait()
     finally:
@@ -165,7 +166,8 @@ def trigger_voice_feedback(distance_value):
     current_time = time.time()
 
     with voice_lock:
-        if not voice_active and (current_time - last_voice_time) >= VOICE_INTERVAL:
+        urgent = distance_value < 500  # mm
+        if urgent or (not voice_active and (current_time - last_voice_time) >= VOICE_INTERVAL):
             voice_active = True
             last_voice_time = current_time
             thread = threading.Thread(target=voice_feedback_thread, args=(distance_value,))
