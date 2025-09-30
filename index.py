@@ -196,7 +196,7 @@ def update_display(screen, font_large, font_small, distance_value):
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
             sys.exit()
-        elif event.type == pygame.MOUSEBUTTONDOWN:  # tap/click
+        elif event.type == pygame.MOUSEBUTTONDOWN:
             switch_mode()
 
     screen.fill((0, 0, 0))  # Black background
@@ -242,9 +242,10 @@ def run_integrated_system():
 
                 # Mode logic
                 if MODES[mode] == "HAPTIC":
-                    update_audio_frequency(distance_value)  # continuous tone
+                    update_audio_frequency(distance_value)
                 elif MODES[mode] == "VOICE":
-                    trigger_voice_feedback(distance_value)  # narration
+                    current_freq = 0
+                    trigger_voice_feedback(distance_value)
                 elif MODES[mode] == "PAUSE":
                     current_freq = 0
 
