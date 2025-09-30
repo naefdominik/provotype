@@ -69,7 +69,7 @@ def audio_callback(outdata, frames, *_):
 
         outdata[:] = 0.3 * wave.reshape(-1, 1)
 
-# Initialize frame and phase attributes **after** defining the function
+
 audio_callback.frame = 0
 audio_callback.phase = 0.0
 
