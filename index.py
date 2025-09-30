@@ -219,7 +219,7 @@ def update_display(screen, font_large, font_small, distance_value):
 # MAIN LOOP
 # ============================================================================
 def run_integrated_system():
-    global mode
+    global mode, current_freq
     sensor = setup_sensor()
     audio_stream = setup_audio()
     screen, font_large, font_small = setup_display()
