@@ -82,7 +82,7 @@ def update_audio_frequency(distance_value):
 # ============================================================================
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
-engine.setProperty("volume", 0.1)
+engine.setProperty("volume", 0.5)
 
 # Phrase pools
 intro_phrases = [
@@ -90,6 +90,13 @@ intro_phrases = [
     "Attention please, I will now describe what is happening.",
     "Let me hold your hand verbally and walk you through this.",
     "This is really important, so I will explain it step by step."
+]
+
+distance_phrases = [
+    "The distance I measured is {dist} meters.",
+    "Right now, the object is {dist} meters away.",
+    "What I see is {dist} meters, and I am telling you.",
+    "I just checked and it is exactly {dist} meters."
 ]
 
 meaning_phrases_close = [
@@ -127,6 +134,7 @@ def narration_for_distance(dist):
 
     narration = " ".join([
         random.choice(intro_phrases),
+        random.choice(distance_phrases).format(dist=dist/1000.0),
         meaning,
         random.choice(repeat_phrases).format(meaning=meaning)
     ])
