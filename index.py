@@ -84,10 +84,13 @@ def setup_audio():
 
 def update_audio_frequency(distance_value):
     global current_freq
-    if distance_value > 2000:  # over 2 meters → silent
+    if distance_value > 2000:
         current_freq = 0
     else:
-        current_freq = 50 * (1 - distance_value / 2000)
+        # normalized distance 0–1
+        x = 1 - distance_value / 2000  # 0 = far, 1 = near
+        # quadratic curve
+        current_freq = 50 * (x ** 2)  # ease-in
 
 
 # ============================================================================
