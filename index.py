@@ -53,13 +53,25 @@ current_freq = 440.0
 
 def audio_callback(outdata, frames, *_):
     global current_freq
-    t = (np.arange(frames, dtype=np.float32) + audio_callback.frame) / samplerate
-    wave = np.sin(2 * np.pi * current_freq * t)
-    outdata[:] = 0.3 * wave.reshape(-1, 1)
-    audio_callback.frame += frames
+    t = np.arange(frames, dtype=np.float32) / samplerate
 
+    if current_freq <= 0:
+        outdata[:] = np.zeros((frames, 1), dtype=np.float32)
+    else:
+        # Use running phase so the sine wave is continuous
+        phase = audio_callback.phase
+        wave = np.sin(2 * np.pi * current_freq * t + phase)
 
+        # Update phase for next callback
+        phase += 2 * np.pi * current_freq * frames / samplerate
+        phase = np.mod(phase, 2 * np.pi)  # wrap phase
+        audio_callback.phase = phase
+
+        outdata[:] = 0.3 * wave.reshape(-1, 1)
+
+# Initialize frame and phase attributes **after** defining the function
 audio_callback.frame = 0
+audio_callback.phase = 0.0
 
 
 def setup_audio():
@@ -75,10 +87,7 @@ def update_audio_frequency(distance_value):
     if distance_value > 2000:  # over 2 meters → silent
         current_freq = 0
     else:
-        # Map distance 2000 → 0 mm to 0–50 Hz
-        # closer = higher frequency
-        freq = 50 * (1 - distance_value / 2000)
-        current_freq = freq
+        current_freq = 50 * (1 - distance_value / 2000)
 
 
 # ============================================================================
