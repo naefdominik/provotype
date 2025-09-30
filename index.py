@@ -11,6 +11,18 @@ import pygame
 
 
 # ============================================================================
+# MODE MANAGEMENT
+# ============================================================================
+MODES = ["HAPTIC", "VOICE", "PAUSE"]
+mode = 2  # start in PAUSE mode
+
+def switch_mode():
+    global mode
+    mode = (mode + 1) % len(MODES)
+    print(f"Switched mode → {MODES[mode]}")
+
+
+# ============================================================================
 # SENSOR SETUP
 # ============================================================================
 def setup_sensor():
@@ -169,15 +181,26 @@ def setup_display():
     return screen, font
 
 def update_display(screen, font, distance_value):
+    global mode
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
             pygame.quit()
             sys.exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:  # tap/click
+            switch_mode()
 
     screen.fill((0, 0, 0))  # Black background
-    text_surface = font.render(f"{distance_value} mm", True, (255, 255, 255))  # White text
-    rect = text_surface.get_rect(center=screen.get_rect().center)
+
+    # Distance text
+    text_surface = font.render(f"{distance_value:.0f} mm", True, (255, 255, 255))
+    rect = text_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 80))
     screen.blit(text_surface, rect)
+
+    # Mode text
+    mode_surface = font.render(f"MODE: {MODES[mode]}", True, (0, 200, 255))
+    mode_rect = mode_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery + 80))
+    screen.blit(mode_surface, mode_rect)
+
     pygame.display.flip()
 
 
@@ -185,7 +208,7 @@ def update_display(screen, font, distance_value):
 # MAIN LOOP
 # ============================================================================
 def run_integrated_system():
-    # Initialize all systems
+    global mode
     sensor = setup_sensor()
     audio_stream = setup_audio()
     screen, font = setup_display()
@@ -194,10 +217,8 @@ def run_integrated_system():
     image_width = int(sqrt(image_resolution))
 
     print("\n=== Integrated Distance Feedback System ===")
-    print("Audio feedback: Continuous tone (50-100 Hz)")
-    print("Voice feedback: Periodic narration every 3 seconds")
-    print("Visual feedback: Fullscreen display of distance (ESC to quit)")
-    print("Press Ctrl+C to exit\n")
+    print("Tap screen to switch modes: HAPTIC → VOICE → PAUSE")
+    print("ESC to quit\n")
 
     try:
         while True:
@@ -208,19 +229,21 @@ def run_integrated_system():
                 center_index = (image_width // 2) * image_width + (image_width // 2)
                 distance_value = measurement_data.distance_mm[center_index] / 4
 
-                # Update audio feedback (continuous)
-                update_audio_frequency(distance_value)
+                # Mode logic
+                if MODES[mode] == "HAPTIC":
+                    update_audio_frequency(distance_value)  # continuous tone
+                elif MODES[mode] == "VOICE":
+                    trigger_voice_feedback(distance_value)  # narration
+                elif MODES[mode] == "PAUSE":
+                    current_freq = 0
 
-                # Trigger voice feedback (periodic)
-                trigger_voice_feedback(distance_value)
-
-                # Update fullscreen display
+                # Update screen
                 update_display(screen, font, distance_value)
 
-                # Print to console
-                print(f"Distance: {distance_value} mm → Audio: {current_freq:.1f} Hz")
+                # Debug console log
+                print(f"Mode={MODES[mode]} | Distance={distance_value:.0f} mm | Freq={current_freq:.1f} Hz")
 
-            time.sleep(0.005)
+            time.sleep(0.01)
 
     except KeyboardInterrupt:
         print("\n\nShutting down...")
