@@ -176,11 +176,13 @@ def setup_display():
     # Scale font size based on screen height
     screen_rect = screen.get_rect()
     font_size = int(screen_rect.height * 0.15)
-    font = pygame.font.SysFont("Arial", font_size)
+    font_large = pygame.font.SysFont("Arial", font_size)
+    font_small = pygame.font.SysFont("Arial", font_size // 2)
 
-    return screen, font
+    return screen, font_large, font_small
 
-def update_display(screen, font, distance_value):
+
+def update_display(screen, font_large, font_small, distance_value):
     global mode
     for event in pygame.event.get():
         if event.type == pygame.QUIT or (event.type == pygame.KEYDOWN and event.key == pygame.K_ESCAPE):
@@ -191,13 +193,13 @@ def update_display(screen, font, distance_value):
 
     screen.fill((0, 0, 0))  # Black background
 
-    # Distance text
-    text_surface = font.render(f"{distance_value:.0f} mm", True, (255, 255, 255))
+    # Distance text (large)
+    text_surface = font_large.render(f"{distance_value:.0f} mm", True, (255, 255, 255))
     rect = text_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 80))
     screen.blit(text_surface, rect)
 
-    # Mode text
-    mode_surface = font.render(f"MODE: {MODES[mode]}", True, (0, 200, 255))
+    # Mode text (small)
+    mode_surface = font_small.render(f"MODE: {MODES[mode]}", True, (0, 200, 255))
     mode_rect = mode_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery + 80))
     screen.blit(mode_surface, mode_rect)
 
@@ -211,7 +213,7 @@ def run_integrated_system():
     global mode
     sensor = setup_sensor()
     audio_stream = setup_audio()
-    screen, font = setup_display()
+    screen, font_large, font_small = setup_display()
 
     image_resolution = sensor.get_resolution()
     image_width = int(sqrt(image_resolution))
@@ -238,7 +240,7 @@ def run_integrated_system():
                     current_freq = 0
 
                 # Update screen
-                update_display(screen, font, distance_value)
+                update_display(screen, font_large, font_small, distance_value)
 
                 # Debug console log
                 print(f"Mode={MODES[mode]} | Distance={distance_value:.0f} mm | Freq={current_freq:.1f} Hz")
