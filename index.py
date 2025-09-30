@@ -143,7 +143,7 @@ repeat_phrases = [
 def narration_for_distance(dist):
     if dist < 500:
         meaning = random.choice(meaning_phrases_close)
-    elif dist < 1200:
+    elif dist < 1500:
         meaning = random.choice(meaning_phrases_mid)
     else:
         meaning = random.choice(meaning_phrases_far)
