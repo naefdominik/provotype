@@ -87,11 +87,9 @@ def update_audio_frequency(distance_value):
     if distance_value > 2000:  # over 2 meters → silent
         current_freq = 0
     else:
-        # Nonlinear mapping: perceptible already from 2m
-        # distance 2000→0 mm, freq 0→50 Hz
+        # distance 2000→0 mm → freq 0→50 Hz
         normalized = 1 - distance_value / 2000
-        # Use squared to start feeling vibration earlier
-        freq = 50 * (normalized ** 2)
+        freq = 50 * np.sqrt(normalized)  # sqrt makes vibration perceptible earlier
         current_freq = freq
 
 
