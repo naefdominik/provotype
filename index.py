@@ -72,12 +72,13 @@ def setup_audio():
 
 def update_audio_frequency(distance_value):
     global current_freq
-    # Silent above 2 meters, then 0 Hz → 50 Hz as distance decreases
-    if distance_value >= 2000:
+    if distance_value > 2000:  # over 2 meters → silent
         current_freq = 0
     else:
-        # Map distance → frequency: 0 Hz (2m) → 50 Hz (0m)
-        current_freq = 50 * (1 - distance_value / 2000)
+        # Map distance 2000 → 0 mm to 0–50 Hz
+        # closer = higher frequency
+        freq = 50 * (1 - distance_value / 2000)
+        current_freq = freq
 
 
 # ============================================================================
