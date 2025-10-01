@@ -102,35 +102,43 @@ engine.setProperty("volume", 0.1)
 
 # Phrase pools
 intro_phrases = [
-    "Okay, listen carefully, I will explain this very clearly.",
-    "Attention please, I will now describe what is happening.",
-    "Let me hold your hand verbally and walk you through this.",
-    "This is really important, so I will explain it step by step."
+    "Listen up, quick note.",
+    "I’ll make this simple.",
+    "Here’s the situation.",
+    "Pay attention now.",
+    "Let me explain fast."
 ]
 
 distance_phrases = [
-    "The distance I measured is {dist} meters.",
-    "Right now, the object is {dist} meters away.",
-    "What I see is {dist} meters, and I am telling you.",
-    "I just checked and it is exactly {dist} meters."
+    "It’s {dist} meters away.",
+    "Measured: {dist} meters.",
+    "Distance: {dist} meters.",
+    "The gap is {dist} meters.",
+    "I read {dist} meters."
 ]
 
 meaning_phrases_close = [
-    "Oh no! That is super close. Please stop immediately.",
-    "That is dangerously near. You should really be careful now.",
-    "Wow, that is right in front of you. Don't move further!"
+    "That’s too close! Stop!",
+    "Danger ahead—halt now!",
+    "Super near, be careful.",
+    "Right in front of you!",
+    "Close call—don’t move!"
 ]
 
 meaning_phrases_mid = [
-    "That is kind of close, so please slow down a little.",
-    "It's in your personal space bubble—be aware of it.",
-    "You are doing fine, but just watch out in front."
+    "Somewhat close, slow down.",
+    "Careful, it’s near-ish.",
+    "Watch the space ahead.",
+    "You’re okay, but cautious.",
+    "Not far—take it easy."
 ]
 
 meaning_phrases_far = [
-    "That is far away, so you can relax and feel safe.",
-    "Nothing to worry about, the way ahead looks clear.",
-    "It's very distant, you are totally safe for now."
+    "Plenty of space ahead.",
+    "All clear, no worries.",
+    "Far away, relax.",
+    "Safe distance, move on.",
+    "Nothing close, you’re good."
 ]
 
 
