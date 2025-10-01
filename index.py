@@ -98,15 +98,19 @@ def update_audio_frequency(distance_value):
 # ============================================================================
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
-engine.setProperty("volume", 0.1)
+engine.setProperty("volume", 0.5)
 
 # Phrase pools
 intro_phrases = [
-    "Listen up, quick note.",
-    "I’ll make this simple.",
-    "Here’s the situation.",
-    "Pay attention now.",
-    "Let me explain fast."
+    "Okay, listen carefully, I will explain this very clearly.",
+    "Attention please, I will now describe what is happening.",
+    "Let me hold your hand verbally and walk you through this.",
+    "This is really important, so I will explain it step by step.",
+    "I will break this down into the simplest words so nothing can go wrong.",
+    "I want to make absolutely sure you understand, so I will repeat myself if needed.",
+    "Let me describe this in a way that leaves no room for confusion at all.",
+    "I will go over every single detail so you don’t miss a thing.",
+    "Don’t worry, I will explain it so thoroughly that it will be impossible to misunderstand."
 ]
 
 distance_phrases = [
