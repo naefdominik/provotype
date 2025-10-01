@@ -213,12 +213,12 @@ def update_display(screen, font_large, font_small, distance_value):
     # Distance text (large)
     distance_m = distance_value / 1000.0
     text_surface = font_large.render(f"{distance_m:.2f} m", True, (255, 255, 255))
-    rect = text_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 20))
+    rect = text_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery - 40))
     screen.blit(text_surface, rect)
 
     # Mode text (small)
     mode_surface = font_small.render(f"MODE: {MODES[mode]}", True, (0, 200, 255))
-    mode_rect = mode_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery + 80))
+    mode_rect = mode_surface.get_rect(center=(screen.get_rect().centerx, screen.get_rect().centery + 60))
     screen.blit(mode_surface, mode_rect)
 
     pygame.display.flip()
