@@ -98,7 +98,7 @@ def update_audio_frequency(distance_value):
 # ============================================================================
 engine = pyttsx3.init()
 engine.setProperty("rate", 170)
-engine.setProperty("volume", 0.5)
+engine.setProperty("volume", 0.1)
 
 # Phrase pools
 intro_phrases = [
