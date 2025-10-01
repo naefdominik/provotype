@@ -133,12 +133,6 @@ meaning_phrases_far = [
     "It's very distant, you are totally safe for now."
 ]
 
-repeat_phrases = [
-    "Let me repeat that so you really understand: {meaning}",
-    "Yes, I will say it again because it is important: {meaning}",
-    "And once more, just so it sinks in: {meaning}"
-]
-
 
 def narration_for_distance(dist):
     if dist < 500:
@@ -151,8 +145,7 @@ def narration_for_distance(dist):
     narration = " ".join([
         random.choice(intro_phrases),
         random.choice(distance_phrases).format(dist=dist/1000.0),
-        meaning,
-        random.choice(repeat_phrases).format(meaning=meaning)
+        meaning
     ])
 
     return narration
