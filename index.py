@@ -9,12 +9,12 @@ import random
 import threading
 import pygame
 
-
 # ============================================================================
 # MODE MANAGEMENT
 # ============================================================================
 MODES = ["HAPTIC", "VOICE", "PAUSE"]
 mode = 2  # start in PAUSE mode
+
 
 def switch_mode():
     global mode
@@ -45,32 +45,45 @@ def setup_sensor():
 
 
 # ============================================================================
-# AUDIO FEEDBACK SETUP
+# AUDIO FEEDBACK SETUP (PULSING/TICKING MODE)
 # ============================================================================
 samplerate = 44100
-current_freq = 440.0
+current_pulse_rate = 0.0  # pulses per second
+pulse_base_freq = 200.0  # Hz for the tick sound
 
 
 def audio_callback(outdata, frames, *_):
-    global current_freq
+    global current_pulse_rate
     t = np.arange(frames, dtype=np.float32) / samplerate
 
-    if current_freq <= 0:
+    if current_pulse_rate <= 0:
         outdata[:] = np.zeros((frames, 1), dtype=np.float32)
     else:
-        # Use running phase so the sine wave is continuous
+        # Create a pulsing square-like wave
+        # Use a sawtooth wave at pulse_rate Hz to create periodic pulses
         phase = audio_callback.phase
-        wave = np.sin(2 * np.pi * current_freq * t + phase)
+
+        # Generate the pulse pattern
+        # Each pulse is a short burst of tone
+        pulse_wave = np.mod(current_pulse_rate * t + phase, 1.0)
+
+        # Create short pulses (duty cycle ~10% for distinct ticks)
+        pulse_train = (pulse_wave < 0.1).astype(np.float32)
+
+        # Multiply by a tone for audible feedback
+        tone = np.sin(2 * np.pi * pulse_base_freq * t)
+
+        # Combine pulse train with tone
+        wave = pulse_train * tone * 0.5
 
         # Update phase for next callback
-        phase += 2 * np.pi * current_freq * frames / samplerate
-        phase = np.mod(phase, 2 * np.pi)  # wrap phase
+        phase += current_pulse_rate * frames / samplerate
+        phase = np.mod(phase, 1.0)
         audio_callback.phase = phase
 
-        outdata[:] = 0.3 * wave.reshape(-1, 1)
+        outdata[:] = wave.reshape(-1, 1)
 
 
-audio_callback.frame = 0
 audio_callback.phase = 0.0
 
 
@@ -83,14 +96,19 @@ def setup_audio():
 
 
 def update_audio_frequency(distance_value):
-    global current_freq
+    global current_pulse_rate
+
     if distance_value > 2000:  # over 2 meters → silent
-        current_freq = 0
+        current_pulse_rate = 0
+    elif distance_value <= 30:  # at 30mm or closer → continuous tone
+        current_pulse_rate = 50  # High rate creates continuous-like effect
     else:
-        # distance 2000→0 mm → freq 0→50 Hz
-        normalized = 1 - distance_value / 2000
-        freq = 50 * np.sqrt(normalized)  # sqrt makes vibration perceptible earlier
-        current_freq = freq
+        # distance 2000→30 mm → pulse rate 0.5→50 Hz
+        # Use exponential mapping so it gets rapid near 30mm
+        normalized = (2000 - distance_value) / (2000 - 30)
+        # Start at 0.5 Hz (slow tick every 2 seconds) and go to 50 Hz (continuous)
+        pulse_rate = 0.5 + 49.5 * (normalized ** 2)
+        current_pulse_rate = pulse_rate
 
 
 # ============================================================================
@@ -144,7 +162,7 @@ def narration_for_distance(dist):
 
     narration = " ".join([
         random.choice(intro_phrases),
-        random.choice(distance_phrases).format(dist=dist/1000.0),
+        random.choice(distance_phrases).format(dist=dist / 1000.0),
         meaning
     ])
 
@@ -228,7 +246,7 @@ def update_display(screen, font_large, font_small, distance_value):
 # MAIN LOOP
 # ============================================================================
 def run_integrated_system():
-    global mode, current_freq
+    global mode, current_pulse_rate
     sensor = setup_sensor()
     audio_stream = setup_audio()
     screen, font_large, font_small = setup_display()
@@ -239,6 +257,8 @@ def run_integrated_system():
     print("\n=== Integrated Distance Feedback System ===")
     print("Tap screen to switch modes: HAPTIC → VOICE → PAUSE")
     print("ESC to quit\n")
+    print("Haptic mode: Pulsing ticks that speed up as you get closer")
+    print("At 30mm or less: Continuous vibration\n")
 
     try:
         while True:
@@ -253,16 +273,16 @@ def run_integrated_system():
                 if MODES[mode] == "HAPTIC":
                     update_audio_frequency(distance_value)
                 elif MODES[mode] == "VOICE":
-                    current_freq = 0
+                    current_pulse_rate = 0
                     trigger_voice_feedback(distance_value)
                 elif MODES[mode] == "PAUSE":
-                    current_freq = 0
+                    current_pulse_rate = 0
 
                 # Update screen
                 update_display(screen, font_large, font_small, distance_value)
 
                 # Debug console log
-                print(f"Mode={MODES[mode]} | Distance={distance_value:.0f} mm | Freq={current_freq:.1f} Hz")
+                print(f"Mode={MODES[mode]} | Distance={distance_value:.0f} mm")
 
             time.sleep(0.01)
 
