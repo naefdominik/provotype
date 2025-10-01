@@ -82,61 +82,15 @@ def setup_audio():
     return stream
 
 
-#def update_audio_frequency(distance_value):
-#    global current_freq
-#    if distance_value > 2000:  # over 2 meters → silent
-#        current_freq = 0
-#    else:
-#        # distance 2000→0 mm → freq 0→50 Hz
-#        normalized = 1 - distance_value / 2000
-#        freq = 50 * np.sqrt(normalized)  # sqrt makes vibration perceptible earlier
-#        current_freq = freq
-
-last_tick_time = 0
-tick_active = False
-tick_duration = 0.05  # 50 ms tick
-
-
 def update_audio_frequency(distance_value):
-    """
-    Convert distance into ticking pattern.
-    - Far away → slow ticks
-    - Close → rapid ticks, merging into continuous buzz at ~30mm
-    - Max frequency capped at 50 Hz
-    """
-    global current_freq, last_tick_time, tick_active
-
-    # Silent if farther than 2m
-    if distance_value > 2000:
+    global current_freq
+    if distance_value > 2000:  # over 2 meters → silent
         current_freq = 0
-        return
-
-    # At very close (<30 mm) → continuous 50 Hz buzz
-    if distance_value <= 30:
-        current_freq = 50
-        return
-
-    # Map distance to tick rate (0.5 Hz → 50 Hz)
-    normalized = max(0.0, 1 - distance_value / 2000.0)
-    tick_rate = 0.5 + normalized * (50 - 0.5)  # smooth scaling up to 50 Hz
-    interval = 1.0 / tick_rate
-
-    now = time.time()
-    if tick_active:
-        # still inside tick window?
-        if (now - last_tick_time) < tick_duration:
-            current_freq = 50  # tick tone at 50 Hz
-        else:
-            tick_active = False
-            current_freq = 0
     else:
-        # time to start next tick?
-        if (now - last_tick_time) >= interval:
-            tick_active = True
-            last_tick_time = now
-            current_freq = 50
-        else:
-            current_freq = 0
+        # distance 2000→0 mm → freq 0→50 Hz
+        normalized = 1 - distance_value / 2000
+        freq = 50 * np.sqrt(normalized)  # sqrt makes vibration perceptible earlier
+        current_freq = freq
 
 
 # ============================================================================
