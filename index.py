@@ -1,3 +1,14 @@
+"""
+Integrated Distance Feedback System
+Author: Dominik Näf
+Date: 12.10.2025
+Description:
+    This program integrates a distance sensor (Qwiic VL53L5CX)
+    with haptic (audio-based vibration), voice (speech output),
+    and visual (on-screen) feedback. The user can switch modes
+    by tapping the screen, cycling through HAPTIC → VOICE → PAUSE.
+"""
+
 import qwiic_vl53l5cx
 import sys
 from math import sqrt
@@ -8,6 +19,7 @@ import pyttsx3
 import random
 import threading
 import pygame
+
 
 # ============================================================================
 # MODE MANAGEMENT
