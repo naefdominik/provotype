@@ -19,7 +19,7 @@ mode = 2  # start in PAUSE mode
 def switch_mode():
     global mode
     mode = (mode + 1) % len(MODES)
-    print(f"Switched mode → {MODES[mode]}")
+    print(f"Switched mode to {MODES[mode]}")
 
 
 # ============================================================================
@@ -33,7 +33,7 @@ def setup_sensor():
         print("The device isn't connected to the system. Please check your connection", file=sys.stderr)
         sys.exit(1)
 
-    print("Initializing sensor board. This can take up to 10s. Please wait.")
+    print("Initializing sensor board. Please wait.")
     if myVL53L5CX.begin() == False:
         print("Sensor initialization unsuccessful. Exiting...", file=sys.stderr)
         sys.exit(1)
@@ -45,7 +45,7 @@ def setup_sensor():
 
 
 # ============================================================================
-# AUDIO FEEDBACK SETUP
+# HAPTIC FEEDBACK SETUP
 # ============================================================================
 samplerate = 44100
 current_freq = 440.0
@@ -84,10 +84,10 @@ def setup_audio():
 
 def update_audio_frequency(distance_value):
     global current_freq
-    if distance_value > 2000:  # over 2 meters → silent
+    if distance_value > 2000:  # over 2 meters: silent
         current_freq = 0
     else:
-        # distance 2000→0 mm → freq 0→50 Hz
+        # distance 2000→0 mm, freq 0→50 Hz
         normalized = 1 - distance_value / 2000
         freq = 50 * np.sqrt(normalized)  # sqrt makes vibration perceptible earlier
         current_freq = freq
@@ -199,7 +199,7 @@ def trigger_voice_feedback(distance_value):
 # ============================================================================
 def setup_display():
     pygame.init()
-    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)  # Fullscreen
+    screen = pygame.display.set_mode((0, 0), pygame.FULLSCREEN)
     pygame.display.set_caption("Distance Display")
 
     # Scale font size based on screen height
