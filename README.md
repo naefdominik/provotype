@@ -1,5 +1,4 @@
 # Provotype
-**Interaction Research 1**
 
 An interactive distance feedback system that uses a VL53L5CX distance sensor to provide multimodal feedback through haptic vibration, voice output, and visual display.
 
@@ -37,4 +36,5 @@ python index.py
 ```
 
 Tap the screen to cycle through modes: HAPTIC → VOICE → PAUSE
+
 
