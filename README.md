@@ -3,6 +3,12 @@
 
 An interactive distance feedback system that uses a VL53L5CX distance sensor to provide multimodal feedback through haptic vibration, voice output, and visual display.
 
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/e7aa00f7-026a-464f-b19f-601e3c6a5ac6" alt="Full" width="30%" />
+  <img src="https://github.com/user-attachments/assets/8e0ad438-421b-40bd-997d-32c8e8591e40" alt="Batteries_Closeup" width="30%" />
+  <img src="https://github.com/user-attachments/assets/b91eee2c-4bc4-4059-87d7-0ffacf074a5e" alt="Display_Closeup" width="30%" />
+</p>
+
 ## Features
 
 - **Distance Sensing**: Uses Qwiic VL53L5CX sensor with 8×8 resolution (64 pads)
@@ -31,3 +37,4 @@ python index.py
 ```
 
 Tap the screen to cycle through modes: HAPTIC → VOICE → PAUSE
+
